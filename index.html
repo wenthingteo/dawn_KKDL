@@ -1,35 +1,35 @@
-\<!DOCTYPE html>
-\<html lang="zh-CN">
-\<head>
-    \<meta charset="UTF-8">
-    \<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    \<title>酷酷的蓝比赛专用\</title>
-    \<!-- Firebase -->
-    \<script src="[https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js](https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js)">\</script>
-    \<script src="[https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js](https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js)">\</script>
-    \<style>
-        \* {
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酷酷的蓝比赛专用</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <style>
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Microsoft YaHei", sans-serif;
         }
-        \:root {
-            \--darkest: #0a2b1e;
-            \--darker: #0f3d2c;
-            \--dark: #14523d;
-            \--dark-row: #0f402e;
-            \--accent: #22c55e;
-            \--accent-light: #86efac;
-            \--text: #ffffff;
-            \--muted: #88c9a8;
-            \--btn-plus: #22c55e;
-            \--btn-minus: #ef4444;
-            \--highlight-bg: #423d10;
-            \--border-hl: #facc15;
-            \--yellow: #facc15;
-            \--red: #ef4444;
-            \--green: #22c55e;
+        :root {
+            --darkest: #0a2b1e;
+            --darker: #0f3d2c;
+            --dark: #14523d;
+            --dark-row: #0f402e;
+            --accent: #22c55e;
+            --accent-light: #86efac;
+            --text: #ffffff;
+            --muted: #88c9a8;
+            --btn-plus: #22c55e;
+            --btn-minus: #ef4444;
+            --highlight-bg: #423d10;
+            --border-hl: #facc15;
+            --yellow: #facc15;
+            --red: #ef4444;
+            --green: #22c55e;
         }
         html, body {
             background: var(--darkest);
@@ -118,7 +118,7 @@
             transition: all 0.2s;
             flex-wrap: wrap;
         }
-        .gift-row\.highlighted {
+        .gift-row.highlighted {
             background: var(--highlight-bg);
             border: 1px solid var(--border-hl);
             box-shadow: 0 0 8px rgba(250, 204, 21, 0.25);
@@ -239,7 +239,7 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        .goal-row\.unlocked {
+        .goal-row.unlocked {
             background: #166534;
             border: 1px solid #22c55e;
         }
@@ -349,8 +349,8 @@
             padding: 12px 14px;
             background: var(--dark-row);
         }
-        tr td\:first-child { border-radius: 8px 0 0 8px; }
-        tr td\:last-child { border-radius: 0 8px 8px 0; }
+        tr td:first-child { border-radius: 8px 0 0 8px; }
+        tr td:last-child { border-radius: 0 8px 8px 0; }
         td input {
             width: 100%;
             padding: 8px 10px;
@@ -371,95 +371,95 @@
             margin-left: 8px;
             font-size: 1rem;
         }
-    \</style>
-\</head>
-\<body>
-    \<div class="sync-status" id="syncStatus">⚡ 连接中...\</div>
+    </style>
+</head>
+<body>
+    <div class="sync-status" id="syncStatus">⚡ 连接中...</div>
 
-    \<header>
-        \<h1 class="header-title">🏁 酷酷的蓝比赛专用\</h1>
-    \</header>
-    \<main>
-        \<!-- Left Panel - Gift List -->
-        \<div class="panel left-panel">
-            \<h2 class="panel-title">
+    <header>
+        <h1 class="header-title">🏁 酷酷的蓝比赛专用</h1>
+    </header>
+    <main>
+        <!-- Left Panel - Gift List -->
+        <div class="panel left-panel">
+            <h2 class="panel-title">
                 礼物清单
-                \<button class="clear-btn" onclick="clearAllGifts()">🗑️ 一键清空\</button>
-            \</h2>
-            \<div class="gift-grid" id="giftGrid">\</div>
+                <button class="clear-btn" onclick="clearAllGifts()">🗑️ 一键清空</button>
+            </h2>
+            <div class="gift-grid" id="giftGrid"></div>
             
-            \<div class="total-box">
-                \<div class="total-row">
-                    \<span>总值 (点数)\</span>
-                    \<span id="grandTotalPoints">0.0\</span>
-                \</div>
-            \</div>
-            \<div class="total-box" style="margin-top: 10px;">
-                \<div class="total-row">
-                    \<span>总值 (钻石)\</span>
-                    \<span id="grandTotalDiamonds">0\</span>
-                \</div>
-            \</div>
+            <div class="total-box">
+                <div class="total-row">
+                    <span>总值 (点数)</span>
+                    <span id="grandTotalPoints">0.0</span>
+                </div>
+            </div>
+            <div class="total-box" style="margin-top: 10px;">
+                <div class="total-row">
+                    <span>总值 (钻石)</span>
+                    <span id="grandTotalDiamonds">0</span>
+                </div>
+            </div>
             
-            \<!-- Goals Section -->
-            \<div class="goals-section">
-                \<h3 class="goals-title">目标 (点数)\</h3>
-                \<div id="goalsContainer">\</div>
-                \<button class="add-goal-btn" onclick="addGoalRow()">+ 添加目标\</button>
-            \</div>
-        \</div>
-        \<!-- Right Panel - Tier Table -->
-        \<div class="panel right-panel">
-            \<h2 class="panel-title">档位周边\</h2>
+            <!-- Goals Section -->
+            <div class="goals-section">
+                <h3 class="goals-title">目标 (点数)</h3>
+                <div id="goalsContainer"></div>
+                <button class="add-goal-btn" onclick="addGoalRow()">+ 添加目标</button>
+            </div>
+        </div>
+        <!-- Right Panel - Tier Table -->
+        <div class="panel right-panel">
+            <h2 class="panel-title">档位周边</h2>
             
-            \<div class="strategy-bar">
-                \<label class="radio-label">
-                    \<input type="radio" name="strategy" value="fewest" checked onchange="renderTierTable()">
+            <div class="strategy-bar">
+                <label class="radio-label">
+                    <input type="radio" name="strategy" value="fewest" checked onchange="renderTierTable()">
                     最少礼物数
-                \</label>
-                \<label class="radio-label">
-                    \<input type="radio" name="strategy" value="mosttypes" onchange="renderTierTable()">
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="strategy" value="mosttypes" onchange="renderTierTable()">
                     最多礼物种类
-                \</label>
-            \</div>
+                </label>
+            </div>
             
-            \<div class="filter-section">
-                \<span class="filter-label">包含礼物 (点击选择/取消):\</span>
-                \<div class="multi-select" id="giftTags">\</div>
-            \</div>
-            \<table>
-                \<thead>
-                    \<tr>
-                        \<th style="width:15%">档位\</th>
-                        \<th style="width:20%">所需钻石\</th>
-                        \<th style="width:30%">可获得周边\</th>
-                        \<th style="width:35%">礼物组合\</th>
-                    \</tr>
-                \</thead>
-                \<tbody id="tierBody">\</tbody>
-            \</table>
-        \</div>
-    \</main>
+            <div class="filter-section">
+                <span class="filter-label">包含礼物 (点击选择/取消):</span>
+                <div class="multi-select" id="giftTags"></div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:15%">档位</th>
+                        <th style="width:20%">所需钻石</th>
+                        <th style="width:30%">可获得周边</th>
+                        <th style="width:35%">礼物组合</th>
+                    </tr>
+                </thead>
+                <tbody id="tierBody"></tbody>
+            </table>
+        </div>
+    </main>
 
-    \<script>
+    <script>
         // ==================================================
         // 🔴 FIREBASE CONFIG
         // ==================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUMKaG-iq6gSiVGnkWK7Aexf6A-6LvrKk",
             authDomain: "kkdl-856f4.firebaseapp.com",
-            databaseURL: "[https://kkdl-856f4-default-rtdb.asia-southeast1.firebasedatabase.app](https://kkdl-856f4-default-rtdb.asia-southeast1.firebasedatabase.app)",
+            databaseURL: "https://kkdl-856f4-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "kkdl-856f4",
             storageBucket: "kkdl-856f4.appspot.com",
             messagingSenderId: "1058958114658",
-            appId: "1:1058958114658\:web\:c7ff68bc22e3ac5ea7b63b"
+            appId: "1:1058958114658:web:c7ff68bc22e3ac5ea7b63b"
         };
         // ==================================================
 
         // Init Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const stateRef = db.ref('kkdl\_state');
+        const stateRef = db.ref('kkdl_state');
         let localUpdate = false;
 
         // Gift data — BOTH diamonds AND points saved per gift
@@ -549,21 +549,21 @@
             if (grid.children.length === 0) {
                 gifts.forEach(gift => {
                     const row = document.createElement("div");
-                    row\.className = \`gift-row\`;
-                    row\.id = \`row-${gift.name}\`;
-                    row\.innerHTML = \`
-                        \<button class="mark-btn" id="mark-${gift.name}">!\</button>
-                        \<span class="gift-name">
-                            \<span class="emoji">${gift.emoji}\</span>
-                            \<span>${gift.name}\</span>
-                        \</span>
-                        \<input type="number" class="qty-input" id="qty-${gift.name}" 
+                    row.className = `gift-row`;
+                    row.id = `row-${gift.name}`;
+                    row.innerHTML = `
+                        <button class="mark-btn" id="mark-${gift.name}">!</button>
+                        <span class="gift-name">
+                            <span class="emoji">${gift.emoji}</span>
+                            <span>${gift.name}</span>
+                        </span>
+                        <input type="number" class="qty-input" id="qty-${gift.name}" 
                                min="0" max="9999" value="${quantities[gift.name]}">
-                        \<div class="btn-group">
-                            \<button class="btn-round btn-minus" data-name="${gift.name}" data-delta="-1">−\</button>
-                            \<button class="btn-round btn-plus" data-name="${gift.name}" data-delta="1">+\</button>
-                        \</div>
-                    \`;
+                        <div class="btn-group">
+                            <button class="btn-round btn-minus" data-name="${gift.name}" data-delta="-1">−</button>
+                            <button class="btn-round btn-plus" data-name="${gift.name}" data-delta="1">+</button>
+                        </div>
+                    `;
                     grid.appendChild(row);
                 });
 
@@ -595,15 +595,15 @@
             }
 
             gifts.forEach(gift => {
-                const row = document.getElementById(\`row-${gift.name}\`);
-                const markBtn = document.getElementById(\`mark-${gift.name}\`);
-                const input = document.getElementById(\`qty-${gift.name}\`);
+                const row = document.getElementById(`row-${gift.name}`);
+                const markBtn = document.getElementById(`mark-${gift.name}`);
+                const input = document.getElementById(`qty-${gift.name}`);
                 input.value = quantities[gift.name] || 0;
                 if (highlighted[gift.name]) {
-                    row\.classList.add('highlighted');
+                    row.classList.add('highlighted');
                     markBtn.classList.add('active');
                 } else {
-                    row\.classList.remove('highlighted');
+                    row.classList.remove('highlighted');
                     markBtn.classList.remove('active');
                 }
             });
@@ -616,20 +616,20 @@
                 const isUnlocked = totalPoints >= goal.target;
                 const diff = goal.target - totalPoints;
                 const row = document.createElement("div");
-                row\.className = \`goal-row ${isUnlocked ? "unlocked" : ""}\`;
-                row\.innerHTML = \`
-                    \<span class="goal-name">
-                        \<input type="text" value="${goal.name}" data-id="${goal.id}" class="goal-name-input">
-                        ${goals.length > 1 ? \`\<button class="delete-goal-btn" data-id="${goal.id}">✕\</button>\` : ""}
-                    \</span>
-                    \<span class="goal-target">
-                        \<input type="number" step="0.1" value="${formatPoints(goal.target)}" 
+                row.className = `goal-row ${isUnlocked ? "unlocked" : ""}`;
+                row.innerHTML = `
+                    <span class="goal-name">
+                        <input type="text" value="${goal.name}" data-id="${goal.id}" class="goal-name-input">
+                        ${goals.length > 1 ? `<button class="delete-goal-btn" data-id="${goal.id}">✕</button>` : ""}
+                    </span>
+                    <span class="goal-target">
+                        <input type="number" step="0.1" value="${formatPoints(goal.target)}" 
                                data-id="${goal.id}" class="goal-target-input">
-                    \</span>
-                    \<span class="goal-diff ${isUnlocked ? "unlocked-text" : "negative"}">
-                        ${isUnlocked ? \`+${formatPoints(-diff)}\` : \`-${formatPoints(diff)}\`}
-                    \</span>
-                \`;
+                    </span>
+                    <span class="goal-diff ${isUnlocked ? "unlocked-text" : "negative"}">
+                        ${isUnlocked ? `+${formatPoints(-diff)}` : `-${formatPoints(diff)}`}
+                    </span>
+                `;
                 container.appendChild(row);
             });
 
@@ -666,8 +666,8 @@
             container.innerHTML = "";
             gifts.forEach(g => {
                 const tag = document.createElement("span");
-                tag.className = \`tag ${selectedGifts[g.name] ? "selected" : ""}\`;
-                tag.textContent = \`${g.emoji} ${g.name}\`;
+                tag.className = `tag ${selectedGifts[g.name] ? "selected" : ""}`;
+                tag.textContent = `${g.emoji} ${g.name}`;
                 tag.onclick = () => {
                     selectedGifts[g.name] = !selectedGifts[g.name];
                     pushState(); renderGiftTags(); renderTierTable();
@@ -680,8 +680,8 @@
             let points = 0, diamonds = 0;
             gifts.forEach(g => {
                 const qty = quantities[g.name] || 0;
-                points += g.points \* qty;
-                diamonds += g.diamonds \* qty;
+                points += g.points * qty;
+                diamonds += g.diamonds * qty;
             });
             return { points, diamonds };
         }
@@ -707,14 +707,14 @@
                     if (g.diamonds <= remaining) {
                         const n = Math.floor(remaining / g.diamonds);
                         items.push({ gift: g, count: n });
-                        remaining -= n \* g.diamonds;
+                        remaining -= n * g.diamonds;
                     }
                 }
                 if (remaining > 0) {
                     const cover = pool.filter(g => g.diamonds >= remaining).sort((a, b) => a.diamonds - b.diamonds)[0] || sortedDesc[0];
                     items.push({ gift: cover, count: 1 });
                 }
-                const totalVal = items.reduce((sum, i) => sum + i.gift.diamonds \* i.count, 0);
+                const totalVal = items.reduce((sum, i) => sum + i.gift.diamonds * i.count, 0);
                 return { items, total: totalVal };
             } else {
                 const sortedAsc = [...pool].sort((a, b) => a.diamonds - b.diamonds);
@@ -733,7 +733,7 @@
                     if (existing) existing.count += need;
                     else items.push({ gift: smallest, count: need });
                 }
-                const totalVal = items.reduce((sum, i) => sum + i.gift.diamonds \* i.count, 0);
+                const totalVal = items.reduce((sum, i) => sum + i.gift.diamonds * i.count, 0);
                 return { items, total: totalVal };
             }
         }
@@ -747,23 +747,23 @@
             result.items.forEach(it => {
                 grouped[it.gift.emoji] = (grouped[it.gift.emoji] || 0) + it.count;
             });
-            return Object.entries(grouped).map(([emoji, n]) => \`${n}${emoji}\`).join(", ");
+            return Object.entries(grouped).map(([emoji, n]) => `${n}${emoji}`).join(", ");
         }
 
         function renderTierTable() {
-            const strategy = document.querySelector('input[name="strategy"]\:checked')?.value || "fewest";
+            const strategy = document.querySelector('input[name="strategy"]:checked')?.value || "fewest";
             const tbody = document.getElementById("tierBody");
             if (!tbody) return;
             tbody.innerHTML = "";
             tiers.forEach((tier, idx) => {
                 const row = document.createElement("tr");
-                row\.innerHTML = \`
-                    \<td>\<input type="number" value="${tier.tier}" data-idx="${idx}" data-field="tier">\</td>
-                    \<td>\<input type="number" value="${tier.diamonds}" data-idx="${idx}" data-field="diamonds">\</td>
-                    \<td>\<input type="text" value="${tier.reward}" placeholder="如：徽章、立牌等"
-                               data-idx="${idx}" data-field="reward">\</td>
-                    \<td class="gift-combo">${buildCombo(tier.diamonds, strategy)}\</td>
-                \`;
+                row.innerHTML = `
+                    <td><input type="number" value="${tier.tier}" data-idx="${idx}" data-field="tier"></td>
+                    <td><input type="number" value="${tier.diamonds}" data-idx="${idx}" data-field="diamonds"></td>
+                    <td><input type="text" value="${tier.reward}" placeholder="如：徽章、立牌等"
+                               data-idx="${idx}" data-field="reward"></td>
+                    <td class="gift-combo">${buildCombo(tier.diamonds, strategy)}</td>
+                `;
                 tbody.appendChild(row);
             });
 
@@ -788,6 +788,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => { renderAll(); });
-    \</script>
-\</body>
-\</html>
+    </script>
+</body>
+</html>
